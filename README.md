@@ -33,4 +33,4 @@ If you have any questions or need assistance, please contact the extension's sup
 
 ## License
 
-This extension is released under the [MIT License](LICENSE).
+This extension is released under the [Apache License 2.0](LICENSE).
