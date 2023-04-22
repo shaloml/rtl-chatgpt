@@ -1,7 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "LTR TO RTL for ChatGPT",
-  "description":"Through this extension it will be possible to read in languages from right to left such as Hebrew and Arabic.",
+  "name": "ChatGPT RTL Transformer",
+  "description":"Web page from left-to-right (LTR) to right-to-left (RTL) and vice versa. With a single click on the extension icon, the body text direction changes, providing a more convenient reading experience for those who work with RTL languages such as Hebrew or Arabic. In addition, the extension automatically adjusts elements with the .overflow-y-auto class by applying direction and display properties, further enhancing readability.
+  While browsing websites with mixed text direction, this extension proves to be a valuable tool for readers, designers, and developers who need to ensure proper text alignment and layout. The lightweight and user-friendly design of the extension allows for seamless integration with any browsing session, minimizing disruption and maximizing productivity.  
+  To use the extension, simply install it from the Chrome Web Store or Microsoft Edge Addons store, and an icon will appear in the browser's toolbar. Click the icon to toggle the text direction of the current web page and apply or remove custom CSS rules from elements with the .overflow-y-auto class. The extension requires only activeTab and scripting permissions to ensure secure and efficient operation.  
+  Discover the benefits of an optimized reading experience for RTL languages with this handy browser extension, designed to address common challenges faced by users who frequently work with right-to-left text. Get started today and enjoy enhanced readability and improved workflow.",
   "version": "1.0",
   "action": {
     "default_icon": {
