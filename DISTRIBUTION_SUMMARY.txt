@@ -1,0 +1,84 @@
+╔══════════════════════════════════════════════════════════════════╗
+║          Claude AI RTL Transformer - v2.0.0                      ║
+║                 DISTRIBUTION PACKAGE READY                        ║
+╚══════════════════════════════════════════════════════════════════╝
+
+📦 DISTRIBUTION FILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+File: claude-ai-rtl-transformer-v2.0.zip
+Size: 29 KB
+Files: 7 (manifest, background.js, 3 icons, README, LICENSE)
+
+✅ READY FOR SUBMISSION TO:
+  • Chrome Web Store
+  • Microsoft Edge Add-ons
+
+📋 INCLUDED DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. README.md              - User documentation
+2. CLAUDE.md              - Developer guide
+3. CHANGELOG.md           - Version history
+4. STORE_LISTING.md       - Store submission info
+5. SUBMISSION_GUIDE.md    - Step-by-step submission
+6. RELEASE_NOTES.md       - Release information
+7. DISTRIBUTION_SUMMARY   - This file
+
+✨ KEY FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Smart RTL/LTR toggle buttons
+✓ Auto-detect code blocks and chat inputs
+✓ Code blocks default to LTR
+✓ Chat inputs default to RTL
+✓ Buttons on left side (no overlap with Copy)
+✓ Global page direction toggle
+✓ Dynamic content detection
+✓ Text alignment auto-fix
+✓ Child elements support
+✓ Manifest V3 compliant
+
+🎯 WHAT YOU NEED TO DO NEXT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1: Create Screenshots (5-8 images)
+────────────────────────────────────────
+• Code block with toggle button (default LTR)
+• Chat input with toggle button (default RTL)
+• Hebrew/Arabic text in action
+• Before/After comparison
+• Global toggle demonstration
+
+Recommended size: 1280x800 or 640x400
+
+STEP 2: Submit to Chrome Web Store
+───────────────────────────────────────
+1. Go to: chrome.google.com/webstore/devconsole
+2. Pay $5 registration fee (one-time)
+3. Click "New Item"
+4. Upload: claude-ai-rtl-transformer-v2.0.zip
+5. Fill listing info (use STORE_LISTING.md)
+6. Add screenshots
+7. Submit for review (1-3 days)
+
+STEP 3: Submit to Microsoft Edge Add-ons
+─────────────────────────────────────────
+1. Go to: partner.microsoft.com/dashboard/microsoftedge
+2. Register (FREE - no fee)
+3. Click "Create new extension"
+4. Upload: claude-ai-rtl-transformer-v2.0.zip
+5. Fill listing info (use STORE_LISTING.md)
+6. Add screenshots
+7. Submit for review (1-5 days)
+
+📧 SUPPORT & CONTACT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Email: shaloml@gmail.com
+License: Apache 2.0
+
+🎉 YOU'RE ALL SET!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The extension is production-ready and fully documented.
+Just create screenshots and submit to the stores!
+
+Good luck with your launch! 🚀
+
+Made with ❤️ for Hebrew & Arabic Claude AI users

@@ -1,14 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "ChatGPT RTL Transformer",
-  "description":"Through LTR & RTL text directions in a click, improving readability for RTL languages.",
-  "version": "1.0",
+  "name": "Claude AI RTL Transformer",
+  "description": "Toggle RTL/LTR directions in Claude AI. Adds smart buttons to code blocks & chat inputs for Hebrew & Arabic speakers.",
+  "version": "2.0",
   "action": {
     "default_icon": {
       "16": "icon16.png",
       "48": "icon48.png",
       "128": "icon128.png"
-    }
+    },
+    "default_title": "Toggle RTL/LTR for Claude AI"
   },
   "permissions": ["activeTab", "scripting"],
   "icons": {
@@ -18,5 +19,8 @@
   },
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "host_permissions": [
+    "https://claude.ai/*"
+  ]
 }
