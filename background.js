@@ -48,7 +48,7 @@ function initializeClaudeRTL() {
       .claude-rtl-toggle-btn {
         position: absolute;
         top: 8px;
-        right: 8px;
+        left: 8px;
         z-index: 1000;
         background: rgba(0, 0, 0, 0.6);
         color: white;
@@ -76,7 +76,7 @@ function initializeClaudeRTL() {
       }
 
       .claude-fieldset-wrapper .claude-rtl-toggle-btn {
-        right: 12px;
+        left: 12px;
         top: 12px;
       }
 
