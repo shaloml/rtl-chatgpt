@@ -1,0 +1,100 @@
+╔════════════════════════════════════════════════════════════════╗
+║     Claude AI RTL Transformer - QUICK START GUIDE             ║
+╚════════════════════════════════════════════════════════════════╝
+
+📦 DISTRIBUTION READY: claude-ai-rtl-transformer-v2.0.zip (29 KB)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 WHAT THIS IS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Chrome/Edge extension that adds RTL/LTR toggle buttons to Claude AI:
+  • Code blocks → LTR by default
+  • Chat inputs → RTL by default
+  • Global page toggle
+  • Perfect for Hebrew & Arabic speakers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📂 FILES YOU NEED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FOR STORE SUBMISSION:
+  ✓ claude-ai-rtl-transformer-v2.0.zip
+
+FOR GUIDANCE:
+  ✓ STORE_LISTING.md       - Copy/paste for store descriptions
+  ✓ SUBMISSION_GUIDE.md    - Step-by-step instructions
+  ✓ FINAL_CHECKLIST.md     - What to do before submitting
+
+FOR REFERENCE:
+  ✓ README.md              - User documentation
+  ✓ RELEASE_NOTES.md       - What's new in v2.0
+  ✓ CHANGELOG.md           - Version history
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 3 STEPS TO LAUNCH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. CREATE SCREENSHOTS (5-8 images at 1280x800)
+   • Go to claude.ai
+   • Load extension manually (chrome://extensions)
+   • Take screenshots of:
+     - Code block with LTR button
+     - Chat input with RTL button
+     - Hebrew/Arabic text working
+     - Before/After toggle
+
+2. SUBMIT TO CHROME WEB STORE
+   → chrome.google.com/webstore/devconsole
+   • Pay $5 fee (one-time)
+   • Upload claude-ai-rtl-transformer-v2.0.zip
+   • Use STORE_LISTING.md for text
+   • Add screenshots
+   • Submit (1-3 days review)
+
+3. SUBMIT TO EDGE ADD-ONS
+   → partner.microsoft.com/dashboard/microsoftedge
+   • Register FREE
+   • Upload claude-ai-rtl-transformer-v2.0.zip
+   • Use STORE_LISTING.md for text
+   • Add screenshots
+   • Submit (1-5 days review)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💡 TESTING BEFORE SUBMISSION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Extract ZIP to a folder
+2. Open chrome://extensions/
+3. Enable "Developer mode"
+4. Click "Load unpacked"
+5. Select extracted folder
+6. Go to claude.ai
+7. Click extension icon
+8. Verify buttons appear:
+   ✓ Code blocks = LTR button (left side)
+   ✓ Chat input = RTL button (left side)
+   ✓ Copy button stays on right
+9. Test toggling directions
+10. Check console for errors (F12)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📧 NEED HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Email: shaloml@gmail.com
+Docs: See SUBMISSION_GUIDE.md for detailed steps
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Extension:        ✅ COMPLETE
+Documentation:    ✅ COMPLETE  
+Testing:          ✅ COMPLETE
+Distribution:     ✅ READY
+
+Next: Create screenshots & submit! 🎉
+
+Time to launch: ~2-3 hours
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Claude AI RTL Transformer",
-  "description": "Toggle LTR & RTL text directions in Claude AI. Adds RTL/LTR buttons to code blocks and conversation inputs for improved readability in RTL languages.",
+  "description": "Toggle RTL/LTR directions in Claude AI. Adds smart buttons to code blocks & chat inputs for Hebrew & Arabic speakers.",
   "version": "2.0",
   "action": {
     "default_icon": {
