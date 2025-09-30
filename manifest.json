@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Claude AI RTL Transformer",
   "description": "Toggle RTL/LTR directions in Claude AI. Adds smart buttons to code blocks & chat inputs for Hebrew & Arabic speakers.",
-  "version": "2.0",
+  "version": "2.0.1",
   "action": {
     "default_icon": {
       "16": "icon16.png",
@@ -19,8 +19,5 @@
   },
   "background": {
     "service_worker": "background.js"
-  },
-  "host_permissions": [
-    "https://claude.ai/*"
-  ]
+  }
 }
