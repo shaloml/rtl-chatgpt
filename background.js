@@ -46,10 +46,12 @@ function initializeClaudeRTL() {
 
     const css = `
       .claude-rtl-toggle-btn {
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        z-index: 1000;
+        display: inline-block;
+        position: relative;
+        margin-right: 10px;
+        float: right;
+        clear: both;
+        z-index: 10;
         background: rgba(0, 0, 0, 0.6);
         color: white;
         border: 1px solid rgba(255, 255, 255, 0.3);
@@ -76,13 +78,18 @@ function initializeClaudeRTL() {
       }
 
       .claude-fieldset-wrapper .claude-rtl-toggle-btn {
-        left: 12px;
-        top: 12px;
+        right: 12px;
+        bottom: 12px;
+        top: auto;
+        left: auto;
+        opacity: 1;
+        pointer-events: auto;
       }
 
       .code-block__code {
         position: relative;
       }
+
 
       /* Override .overflow-y-auto when RTL is active */
       body[data-claude-rtl="true"] .overflow-y-auto {
@@ -99,10 +106,12 @@ function initializeClaudeRTL() {
   }
 
   function createToggleButton(isCodeBlock = false) {
-    const button = document.createElement('button');
+    const button = document.createElement('span');
     button.className = 'claude-rtl-toggle-btn';
     button.textContent = isCodeBlock ? 'LTR' : 'RTL';
     button.setAttribute('data-direction', isCodeBlock ? 'ltr' : 'rtl');
+    button.setAttribute('role', 'button');
+    button.setAttribute('tabindex', '0');
     return button;
   }
 
@@ -144,8 +153,8 @@ function initializeClaudeRTL() {
     const codeBlocks = document.querySelectorAll('.code-block__code');
 
     codeBlocks.forEach((codeBlock) => {
-      // Skip if already has toggle button
-      if (codeBlock.querySelector('.claude-rtl-toggle-btn')) {
+      // Skip if already has toggle button in parent
+      if (codeBlock.parentElement?.querySelector('.claude-rtl-toggle-btn')) {
         return;
       }
 
@@ -160,12 +169,10 @@ function initializeClaudeRTL() {
         toggleElementDirection(codeBlock, button);
       });
 
-      // Make sure the code block is positioned relatively
-      if (getComputedStyle(codeBlock).position === 'static') {
-        codeBlock.style.position = 'relative';
+      // Insert button before the code block (outside the frame)
+      if (codeBlock.parentElement) {
+        codeBlock.parentElement.insertBefore(button, codeBlock);
       }
-
-      codeBlock.appendChild(button);
     });
   }
 
