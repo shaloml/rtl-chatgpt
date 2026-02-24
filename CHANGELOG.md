@@ -2,6 +2,19 @@
 
 All notable changes to Claude AI RTL Transformer will be documented in this file.
 
+## [2.1.0] - 2026-02-24
+
+### RTL Layout & Toggle Fix
+
+#### Added
+- **Sidebar Flip**: Sidebar moves to the right side when RTL is active, matching natural RTL layout
+- **Code Block Toggle Override**: `data-claude-dir` attribute system allows toggling code block direction despite default LTR
+
+#### Fixed
+- **Code Block Toggle Broken**: Clicking LTR/RTL button on code blocks and markdown blocks changed the label but did not change direction (CSS `!important` was overriding inline styles)
+
+---
+
 ## [2.0.0] - 2025-09-29
 
 ### 🎉 Major Release - Complete Rewrite for Claude AI
