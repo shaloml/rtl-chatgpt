@@ -106,6 +106,16 @@ function initializeClaudeRTL() {
         direction: ltr !important;
       }
 
+      /* Move sidebar to right side */
+      body[data-claude-rtl="true"] nav.fixed {
+        left: auto !important;
+        right: 0 !important;
+        border-right-width: 0 !important;
+        border-left-width: 0.5px;
+        border-left-style: solid;
+        border-left-color: inherit;
+      }
+
       /* Message content RTL via CSS cascade */
       body[data-claude-rtl="true"] .font-claude-response,
       body[data-claude-rtl="true"] [data-testid="user-message"] {
@@ -113,10 +123,16 @@ function initializeClaudeRTL() {
         text-align: right;
       }
 
-      /* Code blocks always LTR */
+      /* Code blocks default to LTR */
       body[data-claude-rtl="true"] .code-block__code {
         direction: ltr !important;
         text-align: left !important;
+      }
+
+      /* Allow override when explicitly toggled to RTL */
+      body[data-claude-rtl="true"] .code-block__code[data-claude-dir="rtl"] {
+        direction: rtl !important;
+        text-align: right !important;
       }
 
       /* ProseMirror input inherits from fieldset */
@@ -167,6 +183,7 @@ function initializeClaudeRTL() {
     const newDir = currentDir === 'rtl' ? 'ltr' : 'rtl';
 
     element.style.direction = newDir;
+    element.setAttribute('data-claude-dir', newDir);
 
     // Remove text-align: left if switching to RTL
     if (newDir === 'rtl') {
