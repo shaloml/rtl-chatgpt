@@ -34,8 +34,17 @@ function initializeClaudeRTL() {
 
     if (newDir === 'rtl') {
       body.setAttribute('data-claude-rtl', 'true');
+      processMessages();
+      processPreviewCards();
     } else {
       body.removeAttribute('data-claude-rtl');
+      // Clear inline RTL styles from processed messages
+      const processed = document.querySelectorAll('[data-claude-rtl-processed]');
+      processed.forEach((el) => {
+        el.style.direction = '';
+        el.style.textAlign = '';
+        el.removeAttribute('data-claude-rtl-processed');
+      });
     }
   }
 
@@ -91,10 +100,48 @@ function initializeClaudeRTL() {
       }
 
 
-      /* Override .overflow-y-auto when RTL is active */
-      body[data-claude-rtl="true"] .overflow-y-auto {
+      /* Keep sidebar LTR */
+      body[data-claude-rtl="true"] nav .overflow-y-auto,
+      body[data-claude-rtl="true"] aside .overflow-y-auto {
         direction: ltr !important;
-        display: flex !important;
+      }
+
+      /* Message content RTL via CSS cascade */
+      body[data-claude-rtl="true"] .font-claude-response,
+      body[data-claude-rtl="true"] [data-testid="user-message"] {
+        direction: rtl;
+        text-align: right;
+      }
+
+      /* Code blocks always LTR */
+      body[data-claude-rtl="true"] .code-block__code {
+        direction: ltr !important;
+        text-align: left !important;
+      }
+
+      /* ProseMirror input inherits from fieldset */
+      body[data-claude-rtl="true"] .tiptap.ProseMirror {
+        direction: inherit;
+        text-align: inherit;
+      }
+
+      /* Preview card toggle button positioning */
+      .claude-preview-card-wrapper {
+        position: relative;
+      }
+
+      .claude-preview-card-wrapper > .claude-rtl-toggle-btn {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        float: none;
+        margin: 0;
+        z-index: 20;
+        opacity: 0.7;
+      }
+
+      .claude-preview-card-wrapper > .claude-rtl-toggle-btn:hover {
+        opacity: 1;
       }
     `;
 
@@ -185,16 +232,22 @@ function initializeClaudeRTL() {
         return;
       }
 
-      // Set default direction to RTL for conversation fieldsets and all children
+      // Set RTL on fieldset itself
       fieldset.style.direction = 'rtl';
       fieldset.style.textAlign = 'right';
 
-      // Apply to all children
-      const allChildren = fieldset.querySelectorAll('*');
-      allChildren.forEach((child) => {
-        child.style.direction = 'rtl';
-        child.style.textAlign = 'right';
-      });
+      // Target ProseMirror editor and its overflow wrapper inside the fieldset
+      const editor = fieldset.querySelector('.tiptap.ProseMirror') || fieldset.querySelector('[contenteditable="true"]');
+      if (editor) {
+        editor.style.direction = 'rtl';
+        editor.style.textAlign = 'right';
+        // Also set RTL on the .overflow-y-auto wrapper parent of the editor
+        const overflowParent = editor.closest('.overflow-y-auto');
+        if (overflowParent && fieldset.contains(overflowParent)) {
+          overflowParent.style.direction = 'rtl';
+          overflowParent.style.textAlign = 'right';
+        }
+      }
 
       // Create wrapper
       const wrapper = document.createElement('div');
@@ -210,16 +263,125 @@ function initializeClaudeRTL() {
       const button = createToggleButton(false);
       button.addEventListener('click', (e) => {
         e.stopPropagation();
-        toggleElementDirection(fieldset, button, true); // Pass true to apply to children
+        toggleFieldsetDirection(fieldset, button);
       });
 
       wrapper.appendChild(button);
     });
   }
 
+  function toggleFieldsetDirection(fieldset, button) {
+    const currentDir = button.getAttribute('data-direction');
+    const newDir = currentDir === 'rtl' ? 'ltr' : 'rtl';
+    const textAlign = newDir === 'rtl' ? 'right' : 'left';
+
+    fieldset.style.direction = newDir;
+    fieldset.style.textAlign = textAlign;
+
+    // Toggle ProseMirror editor and its overflow wrapper
+    const editor = fieldset.querySelector('.tiptap.ProseMirror') || fieldset.querySelector('[contenteditable="true"]');
+    if (editor) {
+      editor.style.direction = newDir;
+      editor.style.textAlign = textAlign;
+      const overflowParent = editor.closest('.overflow-y-auto');
+      if (overflowParent && fieldset.contains(overflowParent)) {
+        overflowParent.style.direction = newDir;
+        overflowParent.style.textAlign = textAlign;
+      }
+    }
+
+    button.setAttribute('data-direction', newDir);
+    button.textContent = newDir.toUpperCase();
+  }
+
+  function processMessages() {
+    const selectors = '.font-claude-response, [data-testid="user-message"]';
+    const messages = document.querySelectorAll(selectors);
+
+    messages.forEach((message) => {
+      if (message.getAttribute('data-claude-rtl-processed')) {
+        return;
+      }
+      message.style.direction = 'rtl';
+      message.style.textAlign = 'right';
+      message.setAttribute('data-claude-rtl-processed', 'true');
+    });
+  }
+
+  function processPreviewCards() {
+    // Target preview cards (email/WhatsApp/message previews) - they have font-ui + rounded-2xl + border
+    const cards = document.querySelectorAll('.font-ui.rounded-2xl.border');
+
+    cards.forEach((card) => {
+      // Skip if already wrapped
+      if (card.parentElement?.classList.contains('claude-preview-card-wrapper')) {
+        return;
+      }
+
+      // Set RTL on the card itself
+      card.style.direction = 'rtl';
+      card.style.textAlign = 'right';
+
+      // Set RTL on the scrollable content area inside
+      const scrollArea = card.querySelector('.overflow-y-auto');
+      if (scrollArea) {
+        scrollArea.style.direction = 'rtl';
+        scrollArea.style.textAlign = 'right';
+      }
+
+      // Set RTL on textarea if present
+      const textarea = card.querySelector('textarea');
+      if (textarea) {
+        textarea.style.direction = 'rtl';
+        textarea.style.textAlign = 'right';
+      }
+
+      // Wrap the card for toggle button positioning
+      const wrapper = document.createElement('div');
+      wrapper.className = 'claude-preview-card-wrapper';
+      card.parentNode.insertBefore(wrapper, card);
+      wrapper.appendChild(card);
+
+      // Create toggle button
+      const button = createToggleButton(false);
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        togglePreviewCardDirection(card, button);
+      });
+
+      wrapper.insertBefore(button, card);
+    });
+  }
+
+  function togglePreviewCardDirection(card, button) {
+    const currentDir = button.getAttribute('data-direction');
+    const newDir = currentDir === 'rtl' ? 'ltr' : 'rtl';
+    const textAlign = newDir === 'rtl' ? 'right' : 'left';
+
+    card.style.direction = newDir;
+    card.style.textAlign = textAlign;
+
+    const scrollArea = card.querySelector('.overflow-y-auto');
+    if (scrollArea) {
+      scrollArea.style.direction = newDir;
+      scrollArea.style.textAlign = textAlign;
+    }
+
+    const textarea = card.querySelector('textarea');
+    if (textarea) {
+      textarea.style.direction = newDir;
+      textarea.style.textAlign = textAlign;
+    }
+
+    button.setAttribute('data-direction', newDir);
+    button.textContent = newDir.toUpperCase();
+  }
+
   function processExistingElements() {
     processCodeBlocks();
     processFieldsets();
+    processMessages();
+    processPreviewCards();
 
     // Toggle body direction and add marker
     const body = document.body;
@@ -246,6 +408,8 @@ function initializeClaudeRTL() {
         window.claudeRTLProcessTimeout = setTimeout(() => {
           processCodeBlocks();
           processFieldsets();
+          processMessages();
+          processPreviewCards();
         }, 100);
       }
     });
