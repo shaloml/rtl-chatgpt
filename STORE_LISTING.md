@@ -10,57 +10,88 @@ This document contains all the information needed to submit the extension to Chr
 ---
 
 ## Short Description (132 characters max)
-Toggle RTL/LTR directions in Claude AI. Adds smart buttons to code blocks & chat inputs for Hebrew & Arabic speakers.
+Hebrew and Arabic that read the right way in Claude AI. Automatic per-paragraph direction, plus per-block RTL/LTR control.
 
 ---
 
 ## Detailed Description
 
-### Overview
-Claude AI RTL Transformer is an essential browser extension for Hebrew and Arabic speakers who use Claude AI (chat.claude.ai). It provides seamless RTL (Right-to-Left) and LTR (Left-to-Right) text direction control with smart, context-aware toggle buttons.
+> Paste the block below verbatim into the store's "Detailed description" field.
+> The store renders it as **plain text** — no Markdown — so it is written without any
+> formatting syntax. The 16,000 character limit is a ceiling, not a target: this comes to
+> roughly 3,400 characters, which is about as much as anyone reads before installing.
 
-### Key Features
+```text
+Write Hebrew or Arabic to Claude and it comes out backwards. Ask for code and the code comes out backwards too. This extension fixes both, and mostly it does it without you having to touch anything.
 
-**🎯 Smart Toggle Buttons**
-- Automatically detects code blocks and adds individual toggle buttons
-- Code blocks default to LTR for optimal readability
-- Conversation inputs default to RTL for Hebrew/Arabic text
-- Buttons positioned on the left side (no interference with Copy button)
+WHAT YOU GET
 
-**🔄 Global Direction Control**
-- First click: Initialize extension and set page to RTL
-- Subsequent clicks: Toggle entire page between RTL and LTR
-- Persistent direction across page interactions
+A small floating panel sits at the top of every Claude page with three modes: AUTO, RTL and LTR. Drag it wherever you like — it stays there, and it remembers which mode you chose.
 
-**⚡ Dynamic Content Support**
-- Automatically processes new code blocks as they appear
-- Handles dynamically loaded conversation elements
-- No need to refresh after sending messages
 
-**✨ Perfect Text Alignment**
-- Automatically adjusts text-align property
-- Applies direction to all child elements
-- Ensures consistent formatting throughout
+AUTO — THE ONE YOU'LL ACTUALLY USE
 
-### Perfect For
-- Hebrew speakers working with Claude AI
-- Arabic speakers working with Claude AI
-- Developers mixing RTL text with code
-- Anyone needing flexible text direction control
+AUTO is the default, and for a normal mixed conversation it is the whole product.
 
-### How It Works
-1. Visit Claude AI and start a conversation
-2. Click the extension icon to initialize
-3. See toggle buttons appear on code blocks and input fields
-4. Click any button to switch that element's direction
-5. Click extension icon again to toggle page direction
+Every paragraph works out its own direction from the first real letter in it. A Hebrew paragraph reads right-to-left. An English one reads left-to-right. Code stays left-to-right, always. The sidebar and Claude's own interface stay put.
 
-### Technical Highlights
-- Manifest V3 compliant
-- Lightweight and fast (< 30KB)
-- No external dependencies
-- Privacy-focused (no data collection)
-- Works on Chrome and Edge browsers
+Crucially, each paragraph makes that decision once and then locks it. Claude's answers stream in a word at a time, and a naive approach flips the text back and forth while you are trying to read it. That does not happen here.
+
+So: you type in Hebrew, Claude answers in Hebrew with an English code block in the middle, and every part of it reads correctly. You didn't click anything.
+
+
+RTL — WHEN YOU WANT THE WHOLE THING MIRRORED
+
+RTL mode flips the entire interface right-to-left, sidebar and all, the way a Hebrew or Arabic interface should look. Code blocks still read left-to-right, because code always should.
+
+
+LTR — OFF
+
+Claude exactly as it ships.
+
+
+WHEN AUTO GETS IT WRONG
+
+It happens — a paragraph that opens with a number, a quote, a stray English word. So every code block, the chat input, and preview cards carry their own small button in the corner. Hover the block and it fades in; click it and just that block flips. Nothing else on the page moves.
+
+The buttons are placed to stay out of Claude's way: they never sit on top of the copy button or the send button, and they don't push the layout around.
+
+
+IT ALSO WORKS EVERYWHERE ELSE
+
+Click the toolbar icon on any other website and the whole page flips to right-to-left. Click again and it goes back to exactly how it was. Simple, and useful more often than you'd expect.
+
+
+PRIVACY
+
+The extension reads nothing, collects nothing, and sends nothing anywhere. There is no account, no analytics, no remote code. The only things it stores are your chosen mode and where you dragged the panel, and those live in your own browser.
+
+It has standing permission for claude.ai and for no other site. On other websites it uses activeTab, which means it can only touch a page at the moment you click the icon on it — never in the background, never a site you didn't ask it about.
+
+
+PERMISSIONS, PLAINLY
+
+• claude.ai access — so the panel is already there when you open Claude, instead of making you click the icon on every single page load.
+• activeTab — the plain right-to-left flip on other sites, only on the tab you just clicked.
+• scripting — reaches Claude tabs you already had open when the extension installed or updated, so you don't have to reload them by hand.
+
+
+UPGRADING FROM VERSION 2?
+
+Version 3 needs permission to run on claude.ai automatically — that is what puts the panel there without a click. Chrome always disables an extension that widens its permissions until you approve the change, so after updating you may find this one greyed out.
+
+Nothing is broken. Open the puzzle-piece menu in your toolbar and switch it back on.
+
+
+Open source, Apache 2.0: https://github.com/shaloml/rtl-chatgpt
+Questions or bugs: shaloml@gmail.com
+```
+
+### Technical Highlights (for the reviewer notes, not the listing)
+- Manifest V3
+- Lightweight (36 KB packaged), no external dependencies, no remote code
+- No data collection
+- Chrome and Edge
 
 ### Permissions
 
@@ -138,7 +169,7 @@ This extension does not collect, store, or transmit any user data. It operates e
 ---
 
 ## Version
-2.0.0
+3.0.0
 
 ---
 
