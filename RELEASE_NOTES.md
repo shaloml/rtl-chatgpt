@@ -1,266 +1,97 @@
-# Release Notes - v2.0.0
+# Release Notes — v3.0.0
 
-## 🎉 Claude AI RTL Transformer - Distribution Package Ready!
-
-**Release Date:** September 29, 2025
-**Version:** 2.0.0
-**Package:** `claude-ai-rtl-transformer-v2.0.zip` (29 KB)
+**Release date:** July 13, 2026
+**Package:** `claude-ai-rtl-transformer-v3.0.0.zip` (36 KB)
 
 ---
 
-## 📦 Package Contents
+## ⚠️ Read this first if you are upgrading from 2.x
 
-The distribution package includes:
+This version needs permission to run on claude.ai automatically — that is what lets the panel be
+there without clicking anything. Chrome **always disables an extension that widens its
+permissions** until you re-approve it.
+
+So after the update you will likely find the extension greyed out with a "needs your permission
+to run" note. **Nothing is broken.** Open the puzzle-piece menu in the toolbar and re-enable it.
+
+---
+
+## What's new
+
+### A floating AUTO / RTL / LTR panel
+
+A small draggable pill sits at the top of every Claude AI page. Drag it by the `⠿` grip; it
+remembers where you put it and which mode you chose, across reloads.
+
+| Mode | Behaviour |
+| --- | --- |
+| **AUTO** (new default) | Every message paragraph picks its own direction from its first strong character, then locks it. Hebrew and Arabic read RTL, English and code read LTR, and a streaming answer never flips mid-render. The sidebar stays LTR. |
+| **RTL** | Forces the whole page right-to-left; the sidebar moves to the right edge. Code stays LTR. |
+| **LTR** | Off. Claude's stock layout. |
+
+For a mixed Hebrew/English conversation, AUTO means you stop toggling anything at all.
+
+### It runs by itself
+
+No more clicking the icon after every page load. The extension loads on claude.ai automatically
+and keeps up with new messages, code blocks and chats as they stream in.
+
+### Per-block chips, redesigned
+
+The old RTL/LTR buttons took up a line of layout above each block. They are now small chips that
+float in the corner of the block and fade in when you hover it — styled to match the panel, and
+positioned to stay clear of Claude's own copy and send buttons.
+
+### Other sites still work
+
+Clicking the icon anywhere outside claude.ai flips that page between RTL and LTR, one flip per
+click — the extension's original behaviour, kept. A second click restores the page's original
+direction instead of assuming it was LTR.
+
+---
+
+## Fixed
+
+- **Emoji and CJK were detected as right-to-left.** The direction-detection regex had a Unicode
+  range silently corrupted by text normalization, so an answer opening with `✅` or `🎉` — very
+  common — was classified as RTL and flipped. Fixed.
+- **The composer chip lied in AUTO mode**, showing "RTL" while the field was actually set to
+  automatic. Chips now report what the block is really doing.
+- **Reloading the extension left dead UI behind**: the panel and chips stayed on screen looking
+  perfectly normal, but nothing was clickable. Fixed.
+
+---
+
+## Package contents
 
 ```
-claude-ai-rtl-transformer-v2.0.zip
-├── manifest.json          # Extension configuration (v3)
-├── background.js          # Core functionality (7.1 KB)
-├── icon16.png            # Extension icon 16x16
-├── icon48.png            # Extension icon 48x48
-├── icon128.png           # Extension icon 128x128
-├── README.md             # User documentation
-└── LICENSE               # Apache License 2.0
+claude-ai-rtl-transformer-v3.0.0.zip
+├── manifest.json          # Extension configuration (MV3)
+├── rtl.js                 # Content script: panel, modes, chips, observer
+├── rtl.css                # Panel + chip styling, direction cascade
+├── background.js          # Service worker: routes the toolbar click
+├── icon16.png             # Extension icon 16x16
+├── icon48.png             # Extension icon 48x48
+├── icon128.png            # Extension icon 128x128
+└── LICENSE                # Apache License 2.0
 ```
 
-**Total Package Size:** 29 KB
-**Files:** 7
+## Manual installation
 
----
+1. Download `claude-ai-rtl-transformer-v3.0.0.zip` and unzip it.
+2. Open `chrome://extensions/` (or `edge://extensions/`).
+3. Turn on **Developer mode**.
+4. Click **Load unpacked** and pick the unzipped folder.
 
-## ✨ What's New in v2.0.0
+## Permissions
 
-### Major Features
-✅ **Smart Toggle Buttons** - Individual RTL/LTR controls for code blocks and inputs
-✅ **Auto-Detection** - Finds code blocks and conversation inputs automatically
-✅ **Dynamic Updates** - Handles new content in real-time with MutationObserver
-✅ **Child Element Support** - Applies direction to all nested elements
-✅ **Text Alignment Fix** - Automatic `text-align` adjustment
-✅ **Global Toggle** - Page-wide RTL/LTR switching
-✅ **Non-Overlapping Buttons** - Smart positioning (left side, Copy stays right)
-✅ **Performance Optimized** - Debounced processing (100ms)
+- **`host_permissions` — claude.ai only.** Lets the panel appear without a click. The extension
+  has standing access to claude.ai and to no other site.
+- **`activeTab`.** Powers the plain RTL flip on other sites. It grants access to a page only for
+  the click you just made, which is why the extension works everywhere without asking for
+  permission on every site you visit.
+- **`scripting`.** Reaches claude.ai tabs that were already open when the extension was installed
+  or updated, so you don't have to reload them by hand.
 
-### Default Behaviors
-- 📝 **Code Blocks:** LTR (Left-to-Right)
-- 💬 **Chat Inputs:** RTL (Right-to-Left)
-- 🌐 **Page:** RTL on first activation
-
-### Technical Improvements
-- ⚡ Manifest V3 compliant
-- 🔒 Restricted to claude.ai only (security)
-- 🎯 Optimized for Claude AI interface
-- 🚀 Lightweight and fast
-
----
-
-## 🎯 Target Platforms
-
-### Browsers
-- ✅ Google Chrome (latest)
-- ✅ Microsoft Edge (latest)
-- ✅ All Chromium-based browsers
-
-### Website
-- 🎯 https://claude.ai (exclusively)
-
----
-
-## 📋 Next Steps for Distribution
-
-### 1. Chrome Web Store
-- [ ] Create developer account ($5 one-time fee)
-- [ ] Upload `claude-ai-rtl-transformer-v2.0.zip`
-- [ ] Fill store listing (use `STORE_LISTING.md`)
-- [ ] Add 5-8 screenshots
-- [ ] Submit for review (1-3 days)
-
-### 2. Microsoft Edge Add-ons
-- [ ] Create Partner Center account (FREE)
-- [ ] Upload `claude-ai-rtl-transformer-v2.0.zip`
-- [ ] Fill store listing (use `STORE_LISTING.md`)
-- [ ] Add screenshots
-- [ ] Submit for review (1-5 days)
-
-### 3. Screenshots Needed
-Create screenshots showing:
-1. 📸 Code block with toggle button
-2. 📸 Conversation input with toggle button
-3. 📸 Hebrew/Arabic text in action
-4. 📸 Before/After comparison
-5. 📸 Global toggle demonstration
-
-**Recommended Size:** 1280x800 or 640x400
-
----
-
-## 📄 Documentation Files
-
-All necessary documentation has been created:
-
-| File | Purpose |
-|------|---------|
-| `README.md` | User-facing documentation |
-| `CLAUDE.md` | Developer documentation |
-| `CHANGELOG.md` | Version history |
-| `STORE_LISTING.md` | Store submission information |
-| `SUBMISSION_GUIDE.md` | Step-by-step submission instructions |
-| `RELEASE_NOTES.md` | This file |
-
----
-
-## 🧪 Testing Checklist
-
-Before submission, verify:
-
-- [x] Extension loads without errors
-- [x] Toggle buttons appear on code blocks
-- [x] Toggle buttons appear on chat inputs
-- [x] Code blocks default to LTR
-- [x] Chat inputs default to RTL
-- [x] Buttons positioned on left side
-- [x] No overlap with Copy button
-- [x] Global page toggle works
-- [x] Dynamic content detection works
-- [x] Text alignment adjusts correctly
-- [x] Child elements get direction applied
-- [x] No console errors
-- [x] Works on Chrome
-- [x] Works on Edge
-
----
-
-## 📊 Extension Statistics
-
-- **Lines of Code:** ~250 (background.js)
-- **Dependencies:** None (pure JavaScript)
-- **Permissions:** 3 (activeTab, scripting, host_permissions)
-- **Supported Languages:** All (UI in English, works with any language)
-- **License:** Apache License 2.0
-
----
-
-## 🔧 Technical Specifications
-
-### Manifest Version
-```json
-{
-  "manifest_version": 3,
-  "name": "Claude AI RTL Transformer",
-  "version": "2.0.0"
-}
-```
-
-### Permissions
-```json
-{
-  "permissions": ["activeTab", "scripting"],
-  "host_permissions": ["https://claude.ai/*"]
-}
-```
-
-### Architecture
-- **Service Worker:** background.js
-- **Injection Method:** chrome.scripting.executeScript
-- **Detection:** MutationObserver with debouncing
-- **Styling:** Dynamic CSS injection
-
----
-
-## 🌍 Target Audience
-
-### Primary Users
-- 🇮🇱 Hebrew speakers using Claude AI
-- 🇸🇦 Arabic speakers using Claude AI
-- 👨‍💻 Developers mixing RTL text with code
-- 🎓 Students and educators in RTL languages
-
-### Use Cases
-1. Writing code documentation in Hebrew/Arabic
-2. Asking programming questions in RTL languages
-3. Reviewing code with RTL comments
-4. Teaching programming in Hebrew/Arabic
-5. Technical writing in RTL languages
-
----
-
-## 📞 Support Information
-
-**Developer Email:** shaloml@gmail.com
-**License:** Apache License 2.0
-**Repository:** [Your GitHub URL]
-
----
-
-## 🚀 Launch Plan
-
-### Phase 1: Testing (Current)
-- ✅ Complete core functionality
-- ✅ Test on Chrome and Edge
-- ✅ Create documentation
-- ✅ Package for distribution
-
-### Phase 2: Submission (Next)
-- [ ] Create store accounts
-- [ ] Prepare screenshots
-- [ ] Submit to Chrome Web Store
-- [ ] Submit to Edge Add-ons
-
-### Phase 3: Launch
-- [ ] Monitor reviews
-- [ ] Respond to feedback
-- [ ] Fix critical bugs
-- [ ] Plan v2.1 features
-
-### Phase 4: Growth
-- [ ] Add more language support
-- [ ] Improve UI/UX
-- [ ] Add customization options
-- [ ] Community engagement
-
----
-
-## 💡 Future Enhancements (Post-Launch)
-
-Potential features for v2.1+:
-- 🎨 Customizable button styles
-- ⌨️ Keyboard shortcuts
-- 🔧 Settings panel
-- 🌐 Support for other AI platforms
-- 📱 Mobile browser support
-- 🎯 Per-element direction memory
-- 🌈 Theme customization
-
----
-
-## 📈 Success Metrics
-
-Target goals for first 3 months:
-- 📊 500+ active users
-- ⭐ 4.5+ average rating
-- 💬 Positive user reviews
-- 🐛 < 5% bug reports
-- 🔄 Weekly active usage
-
----
-
-## ⚠️ Known Limitations
-
-Current limitations (to be addressed in future versions):
-- Only works on claude.ai (by design)
-- Manual activation required (click extension icon)
-- No persistent settings between sessions
-- No keyboard shortcuts yet
-
----
-
-## 🎬 Ready to Launch!
-
-The extension is **production-ready** and packaged for distribution.
-
-**Package File:** `claude-ai-rtl-transformer-v2.0.zip`
-
-**Next Action:** Create screenshots and submit to stores! 🚀
-
----
-
-**Made with ❤️ for the Hebrew and Arabic speaking Claude AI community**
+Nothing is read, collected, or sent anywhere. The only things stored are your chosen mode and the
+panel's position, in your own browser.
