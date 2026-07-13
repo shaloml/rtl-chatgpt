@@ -1,0 +1,234 @@
+/* Claude AI RTL Transformer — content script stylesheet.
+ *
+ * Loaded via manifest content_scripts.css, so it lands before first paint and is
+ * not subject to claude.ai's style-src CSP (a JS-created <style> element would be).
+ *
+ * Two UI surfaces:
+ *   #claude-rtl-panel      — the floating AUTO/RTL/LTR panel (draggable, top-center)
+ *   .claude-rtl-toggle-btn — the per-block override chip (code / composer / preview card)
+ * They share a look on purpose: same 11px/600 label, same 5px radius, same #2f6feb active blue.
+ */
+
+/* ============================= direction cascade ============================= */
+
+/* Sidebar chrome stays LTR even when the body is forced RTL. */
+body[data-claude-rtl="true"] nav .overflow-y-auto,
+body[data-claude-rtl="true"] aside .overflow-y-auto {
+  direction: ltr !important;
+}
+
+/* RTL mode moves the sidebar to the right edge. */
+body[data-claude-rtl="true"] nav.fixed {
+  left: auto !important;
+  right: 0 !important;
+  border-right-width: 0 !important;
+  border-left-width: 0.5px;
+  border-left-style: solid;
+  border-left-color: inherit;
+}
+
+body[data-claude-rtl="true"] .font-claude-response,
+body[data-claude-rtl="true"] [data-testid="user-message"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Code stays LTR in every mode... */
+body[data-claude-rtl="true"] .code-block__code,
+body[data-claude-rtl-mode="auto"] .code-block__code {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* ...unless a chip explicitly flipped this block. Specificity (0,3,1) beats the
+ * blanket rule's (0,2,1) at equal importance, which is why the chip writes
+ * data-claude-dir instead of relying on an inline style (inline loses to !important). */
+body[data-claude-rtl="true"] .code-block__code[data-claude-dir="rtl"],
+body[data-claude-rtl-mode="auto"] .code-block__code[data-claude-dir="rtl"] {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+body[data-claude-rtl="true"] .tiptap.ProseMirror {
+  direction: inherit;
+  text-align: inherit;
+}
+
+/* ============================== floating panel ============================== */
+
+#claude-rtl-panel {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147480000;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 5px;
+  border-radius: 8px;
+  background: rgba(40, 40, 40, 0.92);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  direction: ltr;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#claude-rtl-panel .ccr-grip {
+  cursor: move;
+  color: #aaa;
+  padding: 0 4px;
+  font-size: 12px;
+  line-height: 1;
+  touch-action: none;
+}
+
+#claude-rtl-panel .ccr-btn {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #ddd;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+#claude-rtl-panel .ccr-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+#claude-rtl-panel .ccr-btn[data-active] {
+  background: #2f6feb;
+  color: #fff;
+}
+
+/* ========================= per-block override chip ========================= */
+
+/* Positioning contexts. Claude nests a code block as:
+ *
+ *   div.relative.group/copy        <- the frame: 31px header strip + the code. WE USE THIS.
+ *     div.overflow-x-auto          <- the horizontal scroll container
+ *       pre.code-block__code       <- the code
+ *
+ * The chip must hang off the frame. Anchored to either inner element it would sit in
+ * the scroll container and slide out of view the moment a long line is scrolled.
+ * The frame already carries Tailwind's `relative`; assert it anyway. */
+:has(> * > .code-block__code),
+.claude-code-host,
+.claude-fieldset-wrapper,
+.claude-preview-card-wrapper {
+  position: relative;
+}
+
+.claude-rtl-toggle-btn {
+  position: absolute;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  padding: 2px 8px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #ddd;
+  background: rgba(40, 40, 40, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 5px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  /* The label is always Latin; keep it upright inside an RTL ancestor. */
+  direction: ltr;
+  unicode-bidi: isolate;
+  opacity: 0.35;
+  transition: opacity 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
+}
+
+.claude-rtl-toggle-btn:hover,
+.claude-rtl-toggle-btn:focus-visible {
+  opacity: 1;
+  background: rgba(60, 60, 60, 0.96);
+  outline: none;
+}
+
+.claude-rtl-toggle-btn:active {
+  transform: scale(0.94);
+}
+
+/* Hovering anywhere on the block reveals its chip. */
+.claude-code-host:hover > .claude-rtl-toggle-btn,
+.claude-fieldset-wrapper:hover > .claude-rtl-toggle-btn,
+.claude-preview-card-wrapper:hover > .claude-rtl-toggle-btn {
+  opacity: 1;
+}
+
+/* Active = this block is currently forced RTL. Same blue as .ccr-btn[data-active]. */
+.claude-rtl-toggle-btn[data-direction="rtl"] {
+  background: #2f6feb;
+  border-color: #2f6feb;
+  color: #fff;
+}
+
+.claude-rtl-toggle-btn[data-direction="rtl"]:hover {
+  background: #3b7bf5;
+}
+
+.claude-rtl-toggle-btn[data-direction="auto"] {
+  color: #bbb;
+}
+
+/* Corners. Physical left/right on purpose — logical properties would make the chip
+ * jump to the other side of the block the moment the body flips to RTL. */
+
+/* Into the frame's 31px header strip, left of the copy button. Claude's copy button is
+ * `sticky; top: 8px` and therefore travels the whole right edge of the frame as the page
+ * scrolls — neither the top-right nor the bottom-right corner is ever safe. Its column
+ * ends 41px from the frame's right edge, so 48px clears it with room to spare, and the
+ * language label ("bash", "python") sits far away on the left. */
+.claude-code-host > .claude-rtl-toggle-btn {
+  right: 48px;
+  top: 5px;
+  bottom: auto;
+  left: auto;
+}
+
+/* Above the composer, not inside it. The fieldset's whole bottom row is Claude's own
+ * controls (attach, model, settings, mic, voice) and its top area is the text input. The
+ * strip above belongs to the composer's own `pt-6` padding — empty, and never a message. */
+.claude-fieldset-wrapper > .claude-rtl-toggle-btn {
+  right: 6px;
+  top: -22px;
+  bottom: auto;
+  left: auto;
+}
+
+.claude-preview-card-wrapper > .claude-rtl-toggle-btn {
+  left: 8px;
+  top: 8px;
+  right: auto;
+  bottom: auto;
+}
+
+/* Escape hatch for when Claude's layout shifts under us. Set
+ * document.body.dataset.claudeRtlChip = 'alt' from the console to move both chips into
+ * the opposite corner, no CSS surgery needed. */
+body[data-claude-rtl-chip="alt"] .claude-code-host > .claude-rtl-toggle-btn {
+  top: auto;
+  bottom: 8px;
+  left: 10px;
+  right: auto;
+}
+
+body[data-claude-rtl-chip="alt"] .claude-fieldset-wrapper > .claude-rtl-toggle-btn {
+  top: -22px;
+  left: 6px;
+  right: auto;
+}

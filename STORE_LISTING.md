@@ -63,9 +63,27 @@ Claude AI RTL Transformer is an essential browser extension for Hebrew and Arabi
 - Works on Chrome and Edge browsers
 
 ### Permissions
-- activeTab: Access current tab when you click the extension
-- scripting: Inject RTL/LTR functionality
-- host_permissions: Only works on claude.ai (security and privacy)
+
+Paste these as the justifications in the submission form:
+
+- **host_permissions (`https://claude.ai/*`)** — The extension rewrites text-direction styles in
+  the claude.ai DOM so Hebrew and Arabic read correctly. It needs to run on page load, without a
+  click, for the direction control panel to be present. It runs on claude.ai and nowhere else. No
+  data is read, stored, or transmitted off-device.
+- **activeTab** — Powers a plain whole-page RTL/LTR flip on any other site, applied only to the
+  tab the user just clicked the icon on. Chosen deliberately over a broad host permission so the
+  extension never asks for standing access to every site.
+- **scripting** — Used to re-inject the content script into claude.ai tabs that were already open
+  when the extension was installed or updated, so the user does not have to reload them, and to
+  run the plain flip under the activeTab grant.
+
+**Data use:** no remote code, no collection, no analytics. Only the user's chosen mode and the
+panel's position are stored, in their own browser's local storage.
+
+> ⚠️ **v3.0.0 widens permissions** (activeTab → activeTab + host_permissions on claude.ai). This
+> triggers a fresh review, adds "Read and change your data on claude.ai" to the install prompt,
+> and **disables the extension for existing users until they re-approve it**. Say so in the
+> "What's new" field, or users will read it as the extension breaking.
 
 ---
 
