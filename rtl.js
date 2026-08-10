@@ -61,6 +61,36 @@
   var USER_SEL = '[data-testid="user-message"]';
   var SKIP_SEL = 'pre,code,.code-block__code,#' + PANEL_ID;
 
+  // Claude sometimes emits a bidi mark as LITERAL escape text -- the six ASCII
+  // characters backslash-u-2-0-0-F (or 200E / 200B) -- which renders as garbage
+  // and, starting with Latin "u", drags a Hebrew block's first-strong detection
+  // to LTR. Strip that literal text (never real invisible marks -- those are
+  // invisible and sometimes intentional) from rendered prose only. Display-only:
+  // the underlying conversation is untouched. Ported from the sibling project
+  // vscode-claude-rtl (payloads/rtl-inject.js).
+  var RE_ESC = /\\u200[BbEeFf]/g;
+  // On top of SKIP_SEL, never rewrite the composer or any editable surface --
+  // the user may be typing an escape sequence deliberately.
+  var STRIP_SKIP_SEL = SKIP_SEL + ',fieldset,[contenteditable="true"],textarea,input';
+
+  function stripEscapes(root) {
+    try {
+      if (root.closest && root.closest(STRIP_SKIP_SEL)) return;
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+      var node;
+      while ((node = walker.nextNode())) {
+        var t = node.data;
+        if (t.indexOf('\\u200') === -1) continue; // cheap prefilter
+        var host = node.parentElement;
+        if (host && host.closest && host.closest(STRIP_SKIP_SEL)) continue;
+        var s = t.replace(RE_ESC, '');
+        // Write only on an actual change: our own write re-fires the observer,
+        // and an unconditional write would loop forever.
+        if (s !== t) node.data = s;
+      }
+    } catch (e) { /* cosmetic only -- never block the UI */ }
+  }
+
   function firstStrongDir(text) {
     var r = text.search(RE_RTL);
     var l = text.search(RE_LTR);
@@ -88,6 +118,9 @@
   // Correct for any mutation target: root may BE a host, sit inside one, or contain some.
   function decideWithin(root) {
     if (!root || root.nodeType !== 1) return;
+    // Strip literal escape text BEFORE reading textContent, or the leading
+    // "\" + Latin "u" decides a Hebrew paragraph LTR.
+    stripEscapes(root);
 
     var responses = [];
     if (root.matches && root.matches(RESPONSE_SEL)) pushHost(responses, root);
@@ -344,6 +377,7 @@
 
   function processForMode() {
     if (mode === 'rtl') {
+      stripEscapes(document.body); // AUTO strips via decideWithin; RTL has no sweep of its own
       processCodeBlocks();
       processFieldsets('rtl');
       processMessagesBlanket();
@@ -528,6 +562,7 @@
           processFieldsets('auto');
           processPreviewCards('auto');
         } else if (mode === 'rtl') {
+          for (var r = 0; r < batch.length; r++) stripEscapes(batch[r]);
           processCodeBlocks();
           processFieldsets('rtl');
           processMessagesBlanket();

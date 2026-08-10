@@ -54,6 +54,70 @@ body[data-claude-rtl="true"] .tiptap.ProseMirror {
   text-align: inherit;
 }
 
+/* Anthropic's chat UI resolves each markdown block's direction from the block's
+ * OWN content — `unicode-bidi: plaintext` on prose blocks and <span dir="auto">
+ * around user-message text — ignoring any inherited or forced direction. So
+ * under RTL mode a Hebrew paragraph opening with an English word rendered LTR.
+ * Diagnosed against Claude Code's webview (sibling project vscode-claude-rtl,
+ * v0.2.1); claude.ai shares the pattern. Re-assert the forced direction on
+ * prose blocks inside messages and cancel plaintext with `isolate`.
+ *
+ * !important is required, not paranoia: the app ships the plaintext rule three
+ * times — :is(), :-webkit-any() and :-moz-any() — and the legacy :-webkit-any
+ * alias counts as a full pseudo-class, giving that copy specificity (0,2,0),
+ * which beats any sane selector we could write. Importance ends the arms race;
+ * it cannot leak into pre/code because those take direction from their own
+ * direct rule below, not by inheritance. Scoped to messages so the sidebar
+ * rules above keep winning, and guarded out of preview cards so their chip can
+ * still flip a card to LTR with inline styles. (No LTR mirror: in this
+ * extension LTR mode is "off", not a forced mode.) */
+body[data-claude-rtl="true"] :is(.font-claude-response, [data-testid="user-message"]) :is(p, li, h1, h2, h3, h4, h5, h6, blockquote, td, th, dd, dt, summary, figcaption):not(.claude-preview-card-wrapper *) {
+  direction: rtl !important;
+  unicode-bidi: isolate !important;
+}
+
+/* Same fight, second front: app-authored dir="auto" wrappers re-resolve from
+ * content exactly like plaintext. Guarded out of code and preview cards. */
+body[data-claude-rtl="true"] :is(.font-claude-response, [data-testid="user-message"])[dir="auto"],
+body[data-claude-rtl="true"] :is(.font-claude-response, [data-testid="user-message"]) [dir="auto"]:not(pre *):not(code *):not(.claude-preview-card-wrapper *) {
+  direction: rtl !important;
+}
+
+/* The direct rule that keeps code LTR under the forced blocks above — a direct
+ * rule on the element beats an inherited direction with no specificity war.
+ * .code-block__code alone misses inline <code> and bare <pre>. Deliberately
+ * NOT !important, so the chip's [data-claude-dir="rtl"] override still wins. */
+body[data-claude-rtl="true"] pre,
+body[data-claude-rtl="true"] code,
+body[data-claude-rtl-mode="auto"] pre,
+body[data-claude-rtl-mode="auto"] code {
+  direction: ltr;
+  unicode-bidi: normal;
+}
+
+/* AUTO mode: the dir attribute decide() pins carries only UA-level styles,
+ * which any author-level unicode-bidi rule from the app silently overrides —
+ * the lock would be a no-op and the mid-stream left/right flipping it exists
+ * to prevent would come back. Restate the locked direction at author level,
+ * with `isolate` to cancel plaintext. data-ccr is ours, so this can never
+ * touch an app-authored dir attribute. */
+[data-ccr][dir="rtl"] {
+  direction: rtl !important;
+  unicode-bidi: isolate !important;
+}
+[data-ccr][dir="ltr"] {
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+}
+
+/* AUTO: an RTL-locked list item draws its marker on the RIGHT, but its parent
+ * ol/ul is still LTR with left-only padding, so the marker lands in a zero-
+ * padding zone and gets clipped (numbers/bullets vanish on Hebrew items).
+ * Render the marker inside the item's content flow instead. */
+li[data-ccr][dir="rtl"] {
+  list-style-position: inside;
+}
+
 /* ============================== floating panel ============================== */
 
 #claude-rtl-panel {

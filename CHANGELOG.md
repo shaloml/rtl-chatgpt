@@ -2,6 +2,41 @@
 
 All notable changes to Claude AI RTL Transformer will be documented in this file.
 
+## [3.0.1] - 2026-08-10
+
+### Fixed
+- **RTL mode: a Hebrew paragraph opening with an English word rendered LTR.** Anthropic's
+  chat UI resolves each markdown block's direction from the block's own first strong
+  character (`unicode-bidi: plaintext` on prose blocks, `<span dir="auto">` around
+  user-message text), which overrides the forced page direction. Diagnosed against
+  Claude Code's webview in the sibling project vscode-claude-rtl (v0.2.1); claude.ai
+  shares the pattern. RTL mode now re-asserts `direction: rtl` and cancels plaintext
+  with `unicode-bidi: isolate` on prose blocks inside messages, and forces app-authored
+  `dir="auto"` wrappers. `!important` is required — claude.ai delivers plaintext as
+  lazily-loaded Tailwind utility classes (`[unicode-bidi:plaintext]`, some duplicated
+  under an `.epitaxy-root` prefix at higher specificity), and those chunks load after
+  the content-script CSS, so at equal importance the app wins ties. It cannot leak
+  into code: `pre`/`code` now carry a direct LTR rule, and a direct rule beats
+  inherited direction outright.
+- **AUTO mode: the per-paragraph direction lock could be silently defeated.** The `dir`
+  attribute `decide()` pins carries only UA-level styles, which any author-level
+  `unicode-bidi` rule from the app overrides — bringing back the mid-stream flipping
+  the lock exists to prevent. The locked direction is now also asserted at author level
+  via `[data-ccr][dir]` rules.
+- **AUTO mode: list markers (numbers/bullets) of RTL-locked items are no longer
+  clipped** — the parent list stays LTR with left-only padding, so the right-side
+  marker of a Hebrew item was drawn outside it; it now renders inside the item's
+  content flow (`list-style-position: inside`).
+
+### Added
+- **Strip literal bidi-escape text**: Claude sometimes emits a bidi mark as literal
+  escape text — the six ASCII characters backslash, `u`, `2`, `0`, `0`, `F` (or the
+  200E / 200B variants) — instead of the invisible character. It renders as garbage
+  and, starting with Latin `u`, drags a Hebrew paragraph's first-strong detection to
+  LTR. The observer now strips that literal text from rendered prose. Display-only
+  (the conversation itself is untouched); code blocks, the composer, and all editable
+  surfaces are skipped.
+
 ## [3.0.0] - 2026-07-13
 
 ### 🎉 Floating AUTO / RTL / LTR panel
